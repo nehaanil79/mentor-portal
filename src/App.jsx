@@ -1,15 +1,16 @@
 import { useState } from "react"
 import MentorCard from "./components/MentorCard"
+import SearchBar from "./components/SearchBar" 
+import FilterBar from "./components/FilterBar" 
 import { mentors } from "./data/mentors"
-
 
 const expertiseOptions = [...new Set(mentors.flatMap((mentor) => mentor.expertise))].sort()
 const universityOptions = [...new Set(mentors.map((mentor) => mentor.university))].sort()
 
 function App() {
   const [searchText, setSearchText] = useState("")
-  const [selectedExpertise, setSelectedExpertise] = useState("All") 
-  const [selectedUniversity, setSelectedUniversity] = useState("All") 
+  const [selectedExpertise, setSelectedExpertise] = useState("All")
+  const [selectedUniversity, setSelectedUniversity] = useState("All")
 
   const search = searchText.trim().toLowerCase()
 
@@ -20,26 +21,20 @@ function App() {
       mentor.role.toLowerCase().includes(search) ||
       mentor.expertise.some((skill) => skill.toLowerCase().includes(search))
 
- 
     const matchesExpertise =
       selectedExpertise === "All" || mentor.expertise.includes(selectedExpertise)
 
-    
     const matchesUniversity =
       selectedUniversity === "All" || mentor.university === selectedUniversity
 
     return matchesSearch && matchesExpertise && matchesUniversity
   })
 
-  
   function clearFilters() {
     setSearchText("")
     setSelectedExpertise("All")
     setSelectedUniversity("All")
   }
-
-  const inputStyles =
-    "w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -51,53 +46,23 @@ function App() {
           </p>
         </header>
 
+        
         <div className="mb-4 grid gap-4 sm:grid-cols-3">
-          <input
-            type="search"
-            value={searchText}
-            onChange={(event) => setSearchText(event.target.value)}
-            placeholder="Search by name, role or skill"
-            aria-label="Search mentors"
-            className={inputStyles}
+          <SearchBar value={searchText} onChange={setSearchText} />
+          <FilterBar
+            expertiseOptions={expertiseOptions}
+            selectedExpertise={selectedExpertise}
+            onExpertiseChange={setSelectedExpertise}
+            universityOptions={universityOptions}
+            selectedUniversity={selectedUniversity}
+            onUniversityChange={setSelectedUniversity}
           />
-
-          
-          <select
-            value={selectedExpertise}
-            onChange={(event) => setSelectedExpertise(event.target.value)}
-            aria-label="Filter by expertise"
-            className={inputStyles}
-          >
-            <option value="All">All expertise</option>
-            {expertiseOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-
-         
-          <select
-            value={selectedUniversity}
-            onChange={(event) => setSelectedUniversity(event.target.value)}
-            aria-label="Filter by university"
-            className={inputStyles}
-          >
-            <option value="All">All universities</option>
-            {universityOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
         </div>
 
-      
         <p className="mb-6 text-sm text-slate-600">
           Showing {filteredMentors.length} of {mentors.length} mentors
         </p>
 
-        
         {filteredMentors.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredMentors.map((mentor) => (
