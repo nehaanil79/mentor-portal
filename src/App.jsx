@@ -3,6 +3,7 @@ import MentorCard from "./components/MentorCard"
 import SearchBar from "./components/SearchBar" 
 import FilterBar from "./components/FilterBar" 
 import { mentors } from "./data/mentors"
+import BookingModal from "./components/BookingModal"
 
 const expertiseOptions = [...new Set(mentors.flatMap((mentor) => mentor.expertise))].sort()
 const universityOptions = [...new Set(mentors.map((mentor) => mentor.university))].sort()
@@ -11,6 +12,7 @@ function App() {
   const [searchText, setSearchText] = useState("")
   const [selectedExpertise, setSelectedExpertise] = useState("All")
   const [selectedUniversity, setSelectedUniversity] = useState("All")
+  const [selectedMentor, setSelectedMentor] = useState(null)
 
   const search = searchText.trim().toLowerCase()
 
@@ -66,7 +68,7 @@ function App() {
         {filteredMentors.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredMentors.map((mentor) => (
-              <MentorCard key={mentor.id} mentor={mentor} />
+              <MentorCard key={mentor.id} mentor={mentor} onRequest={setSelectedMentor} />
             ))}
           </div>
         ) : (
@@ -82,6 +84,9 @@ function App() {
           </div>
         )}
       </div>
+      {selectedMentor && (
+  <BookingModal mentor={selectedMentor} onClose={() => setSelectedMentor(null)} />
+)}
     </main>
   )
 }

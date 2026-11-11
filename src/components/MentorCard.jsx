@@ -1,4 +1,4 @@
-function MentorCard({ mentor }) {
+function MentorCard({ mentor, onRequest }) {
   const initials = mentor.name
     .split(" ")
     .map((part) => part[0])
@@ -35,6 +35,7 @@ function MentorCard({ mentor }) {
 
       <button
         type="button"
+        onClick={() => onRequest(mentor)}
         className="mt-6 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
       >
         Request a session
