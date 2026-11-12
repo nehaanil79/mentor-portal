@@ -4,6 +4,7 @@ import SearchBar from "./components/SearchBar"
 import FilterBar from "./components/FilterBar" 
 import { mentors } from "./data/mentors"
 import BookingModal from "./components/BookingModal"
+import MentorMatch from "./components/MentorMatch"
 
 const expertiseOptions = [...new Set(mentors.flatMap((mentor) => mentor.expertise))].sort()
 const universityOptions = [...new Set(mentors.map((mentor) => mentor.university))].sort()
@@ -47,7 +48,8 @@ function App() {
             Find a Grad Careers mentor who fits your goals.
           </p>
         </header>
-
+        
+        <MentorMatch mentors={mentors} onRequest={setSelectedMentor} />
         
         <div className="mb-4 grid gap-4 sm:grid-cols-3">
           <SearchBar value={searchText} onChange={setSearchText} />
